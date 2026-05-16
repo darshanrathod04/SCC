@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SCC | Professional Engineering Credential</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap');
+        
+        body { background: #020617; font-family: 'Outfit', sans-serif; }
+        
+        /* Corporate Landscape Dimensions */
+        .cert-canvas { width: 1120px; height: 790px; margin: auto; background: white; position: relative; }
+        
+        .outer-frame { height: 100%; padding: 45px; position: relative; }
+        
+        .inner-content { 
+            height: 100%; 
+            border: 1px solid #e2e8f0; 
+            background: rgb(185, 225, 238);
+            padding: 60px; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between;
+            position: relative;
+        }
+
+        /* Subtle Security Pattern */
+        .pattern-bg {
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(#abc4e3 0.8px, transparent 0.8px);
+            background-size: 24px 24px;
+            opacity: 0.2;
+            pointer-events: none;
+        }
+
+        .blue-accent {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: #0ea5e9;
+        }
+       #certificate {
+    width: 1120px;
+    height: 790px;
+    position: relative; /* Keep this relative */
+    margin: 0 auto;    /* Centers on screen, but script will use x:0 for PDF */
+    padding: 0;        /* Ensure no extra padding outside the frame */
+    overflow: hidden;
+    box-sizing: border-box;
+    background: white;
+}
+
+@media print {
+    /* Force the body to be exactly the same size as the cert for the engine */
+    body { width: 1120px; height: 790px; margin: 0; padding: 0; }
+    #certificate { margin: 0 !important; }
+}
+
+/* Ensure the main container has a fixed aspect ratio */
+#certificate {
+    width: 1120px;
+    height: 790px;
+    overflow: hidden; /* Prevents content from leaking out */
+}
+#certificate {
+    width: 1120px;
+    height: 790px;
+    overflow: hidden;
+    box-sizing: border-box; /* Ensures padding stays inside the 1120px width */
+    margin: 0 auto; /* Centers the div */
+    background: white;
+}
+
+@media print {
+    body { background: white !important; }
+    .no-print { display: none !important; }
+}
+
+    </style>
+</head>
+<body class="p-10">
+
+    <div class="fixed top-6 right-6 z-50 flex gap-4 no-print">
+        <button onclick="downloadPDF()" class="bg-sky-600 text-white px-8 py-3 rounded-lg font-black uppercase text-[10px] tracking-widest shadow-xl hover:bg-sky-700 transition-all">
+            <i class="fas fa-file-pdf mr-2"></i> Download Official PDF
+        </button>
+        <button onclick="window.close()" class="bg-slate-200 text-slate-800 px-8 py-3 rounded-lg font-black uppercase text-[10px] tracking-widest">
+            Close
+        </button>
+    </div>
+
+    <div id="certificate" class="cert-canvas">
+        <div class="outer-frame">
+            <div class="blue-accent"></div>
+
+            <div class="inner-content">
+                <div class="pattern-bg"></div>
+
+                <div class="flex justify-between items-start relative z-10">
+                    <div class="flex items-center gap-5">
+                        <div class="w-20 h-20 rounded-xl overflow-hidden shadow-lg border border-slate-200">
+                            <img src="../../images/ssclogo.png" alt="SCC" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-black tracking-tighter text-slate-900 leading-none">SCC MAINFRAME</h2>
+                            <p class="text-[9px] font-bold text-sky-600 uppercase tracking-[0.4em] mt-1">Nagpur Technology Council</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Credential ID</p>
+                        <p id="certId" class="text-xs font-mono font-bold text-slate-900"></p>
+                    </div>
+                </div>
+
+                <div class="text-center relative z-10 space-y-8">
+                    <div class="space-y-2">
+                        <p class="text-sky-600 font-black uppercase tracking-[0.6em] text-[11px]">Certification of Professional Achievement</p>
+                        <p class="text-slate-500 text-lg font-light">This acknowledges that</p>
+                    </div>
+
+                    <h1 id="certName" class="text-7xl font-black text-slate-900 tracking-tighter uppercase">
+                        ...
+                    </h1>
+
+                    <div class="w-32 h-1.5 bg-sky-600 mx-auto"></div>
+
+                   <p class="text-slate-500 text-xl max-w-3xl mx-auto leading-relaxed font-light">
+                        has successfully completed the audited requirements for the <span class="text-slate-900 font-bold uppercase italic">Certified Systems Architect</span> 
+                        designation with a verified proficiency score of <span id="certXP" class="text-blue-600 font-black">...</span> XP nodes.
+                    </p>
+                </div>
+
+               <div class="flex justify-between items-end relative z-10 w-full mt-12">
+
+    <div class="w-80 border-b border-slate-200 pb-2">
+    <img id="sigDisplay" src="" class="h-12 mb-1 hidden">
+    <p id="sigNameText" class="text-3xl text-slate-900 mb-1" style="font-family: 'Georgia', serif; font-style: italic;">Darshan Rathod</p>
+    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Director of Infrastructure</p>
+</div>
+
+    <div class="flex flex-col items-center">
+        <div class="p-2 border border-slate-200 rounded-xl bg-white shadow-sm">
+            <img id="qrCode" crossorigin="anonymous" src="" class="w-16 h-16">
+        </div>
+        <p class="text-[7px] font-black text-sky-600 uppercase tracking-tighter mt-2">Authenticated System Node</p>
+    </div>
+
+    <div class="w-80 text-right border-b border-slate-200 pb-2">
+        <p id="issueDate" class="text-xl font-black text-slate-900 mb-1"></p>
+        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Validation Date</p>
+    </div>
+
+</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    // 1. Try to get specific task data from the approval trigger
+    const certData = JSON.parse(localStorage.getItem('pending_cert_data'));
+    const sessionUser = JSON.parse(localStorage.getItem('scc_user'));
+
+    if (certData) {
+        document.getElementById('certName').innerText = certData.studentName;
+        document.getElementById('certXP').innerText = certData.xp;
+        // Optionally update the description text to include certData.taskName
+    } else if (sessionUser) {
+        // Fallback to logged-in user if viewing own certificate
+        document.getElementById('certName').innerText = sessionUser.fullName;
+        document.getElementById('certXP').innerText = sessionUser.xp || 0;
+    }
+
+    // 2. Generate ID and QR code
+    const randomId = `SCC-SYS-${Math.floor(100000 + Math.random() * 999999)}`;
+    document.getElementById('certId').innerText = randomId;
+    document.getElementById('qrCode').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=VERIFY-${randomId}&color=0c4a6e&bgcolor=ffffff`;
+
+    // 3. Clear the pending data so it doesn't persist
+    localStorage.removeItem('pending_cert_data');
+});
+        const savedSig = localStorage.getItem('founderSignature');
+if (savedSig) {
+    document.getElementById('sigDisplay').src = savedSig;
+    document.getElementById('sigDisplay').classList.remove('hidden');
+    document.getElementById('sigNameText').classList.add('hidden'); // Hide text if image exists
+}
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = JSON.parse(localStorage.getItem('scc_user'));
+            if(!user) return;
+
+            document.getElementById('certName').innerText = user.fullName || "Unauthorized User";
+            document.getElementById('certXP').innerText = user.experiencePoints || user.xp || 0;
+            
+            const randomId = `SCC-SYS-${Math.floor(100000 + Math.random() * 900000)}`;
+            document.getElementById('certId').innerText = randomId;
+            
+            document.getElementById('issueDate').innerText = new Date().toLocaleDateString('en-US', {
+                month: 'long', day: 'numeric', year: 'numeric'
+            });
+
+            // Set QR code pointing to your verification page
+            document.getElementById('qrCode').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=VERIFY-${randomId}&color=0c4a6e&bgcolor=ffffff`;
+        });
+function downloadPDF() {
+    const element = document.getElementById('certificate');
+    const qrImg = document.getElementById('qrCode');
+    
+    // 1. Force CORS trust on the QR node
+    qrImg.setAttribute('crossOrigin', 'anonymous');
+
+    const options = {
+        margin: 0,
+        filename: 'SCC-Official-Credential.pdf',
+        image: { type: 'jpeg', quality: 1.0 },
+        html2canvas: { 
+            scale: 2, 
+            useCORS: true, // Critical for external QR API
+            allowTaint: false,
+            logging: false,
+            x: 0,
+            y: 0,
+            width: 1120, // Perfect width
+            height: 790, // Perfect height
+            windowWidth: 1120,
+            scrollX: 0,
+            scrollY: 0
+        },
+        jsPDF: { 
+            unit: 'px', 
+            format: [1120, 790], 
+            orientation: 'landscape',
+            hotfixes: ['px_scaling']
+        }
+    };
+
+    // 2. Wait 800ms to ensure the QR API has fully delivered the image
+    setTimeout(() => {
+        html2pdf().set(options).from(element).save();
+    }, 800);
+}
+
+    </script>
+</body>
+</html>

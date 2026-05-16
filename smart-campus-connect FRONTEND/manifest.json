@@ -1,0 +1,23 @@
+{
+  "name": "Smart Campus Connect",
+  "short_name": "SCC",
+  "description": "The digital bridge for Nagpur's student community.",
+  "start_url": "/views/shared/index.html",
+  "display": "standalone",
+  "background_color": "#05070A",
+  "theme_color": "#05070A",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/images/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

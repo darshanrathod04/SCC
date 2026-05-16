@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Professional Internships | SCC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-slate-950 text-white selection:bg-cyan-500 selection:text-slate-900">
+
+ <nav class="fixed w-full z-50 glass py-4 px-6 md:px-12 flex justify-between items-center backdrop-blur-xl border-b border-white/5">
+    <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='../student/main.htmlmain.html'">
+        <div class="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-xl flex items-center justify-center">
+            <img src="../../images/ssclogo.png" alt="SCC" class="w-full h-full rounded-xl object-cover border border-white/10">
+        </div>
+        <div class="text-xl font-black tracking-tighter uppercase text-white">SCC<span class="text-cyan-400">.</span></div>
+    </div>
+    <div id="nav-links" class="flex space-x-6 font-bold text-[15px] uppercase tracking-widest text-slate-400">
+        <a href="../student/main.html" id="homeLink">Dashboard</a>
+        <a href="../shared/internships.html" id="internshipLink">Placements</a>
+        <a href="../shared/events.html" id="eventsLink">Conclaves</a>
+    </div>
+
+    <button onclick="logout()" class="px-3 py-2 glass border-white/5 text-red-400 text-[8px] font-black uppercase rounded-lg">Terminate</button>
+</nav>
+
+    <main class="pt-40 px-6 md:px-12 max-w-7xl mx-auto">
+
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-20 reveal">
+            <div class="lg:col-span-2 glass p-10 md:p-16 rounded-[3rem] border-white/10 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-cyan-500/5 blur-[100px] -z-10"></div>
+                <span class="text-cyan-400 font-black uppercase tracking-[0.3em] text-[10px] mb-6 inline-block">Career Strategy</span>
+                <h1 class="text-5xl md:text-6xl font-black tracking-tighter mb-6">Master the <span class="gradient-text">Industry Gap.</span></h1>
+                <p class="text-slate-400 text-lg leading-relaxed mb-8">
+                    Internships are more than a line on your resume; they are your "Proof of Work" in the real world. At SCC, we bridge the gap between academic theory and high-stakes industry execution. 
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="flex gap-4">
+                        <div class="w-10 h-10 glass rounded-xl flex items-center justify-center text-cyan-400 border-white/5"><i class="fas fa-rocket"></i></div>
+                        <div>
+                            <p class="font-bold text-sm">Rapid Upskilling</p>
+                            <p class="text-xs text-slate-500">Learn tools that aren't taught in classrooms.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="w-10 h-10 glass rounded-xl flex items-center justify-center text-blue-400 border-white/5"><i class="fas fa-network-wired"></i></div>
+                        <div>
+                            <p class="font-bold text-sm">Strategic Networking</p>
+                            <p class="text-xs text-slate-500">Build connections with Nagpur's lead engineers.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass p-10 rounded-[3rem] border-white/10 flex flex-col justify-center text-center">
+                <p class="text-slate-500 uppercase font-black text-xs tracking-widest mb-4">Success Metrics</p>
+                <p class="text-6xl font-black gradient-text mb-2">82%</p>
+                <p class="text-slate-300 font-medium px-4">Of our interns secure full-time offers before graduation.</p>
+                <div class="mt-8 pt-8 border-t border-white/5">
+                    <p class="text-xs text-slate-500 italic">"The best time to start was yesterday. The second best time is now."</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="postFormSection" class="mb-20 reveal">
+            <div class="flex items-center justify-between mb-8 px-4">
+                <div class="flex items-center gap-4">
+                    <div class="h-10 w-2 bg-cyan-500 rounded-full"></div>
+                    <h2 class="text-4xl font-black tracking-tighter">Deploy <span class="text-cyan-400">Opportunities</span></h2>
+                </div>
+                <p class="text-[10px] text-slate-500 font-black uppercase tracking-widest hidden md:block">Organizer Access Level 01</p>
+            </div>
+
+            <form id="internshipForm" class="glass p-10 rounded-[3rem] grid grid-cols-1 md:grid-cols-3 gap-8 border-white/10 shadow-2xl">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-3">Engineering Role</label>
+                    <input type="text" id="title" placeholder="e.g. Full-Stack Architect" class="w-full p-4 rounded-2xl bg-white/5 border border-white/10 outline-none focus:border-cyan-500 transition-all font-medium" required>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-3">Hiring Authority</label>
+                    <input type="text" id="company" placeholder="e.g. Infosys Digital" class="w-full p-4 rounded-2xl bg-white/5 border border-white/10 outline-none focus:border-cyan-500 transition-all font-medium" required>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-3">Work Model</label>
+                    <input type="text" id="location" placeholder="Remote / Nagpur Campus" class="w-full p-4 rounded-2xl bg-white/5 border border-white/10 outline-none focus:border-cyan-500 transition-all font-medium" required>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-3">Contract Duration</label>
+                    <input type="text" id="duration" placeholder="6 Months (Summer)" class="w-full p-4 rounded-2xl bg-white/5 border border-white/10 outline-none focus:border-cyan-500 transition-all font-medium" required>
+                </div>
+                <div class="md:col-span-2 space-y-2">
+                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-3">Tech Stack Required</label>
+                    <input type="text" id="skills" placeholder="Java, Spring Boot, MySQL, Tailwind" class="w-full p-4 rounded-2xl bg-white/5 border border-white/10 outline-none focus:border-cyan-500 transition-all font-medium" required>
+                </div>
+                <button type="submit" class="md:col-span-3 py-5 bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-black rounded-[1.5rem] hover:scale-[1.01] active:scale-95 transition-all shadow-xl shadow-cyan-500/20 uppercase tracking-widest text-xs">
+                      Authorize & Publish Opportunity
+                </button>
+            </form>
+        </section>
+
+        <section class="pb-32">
+            <div class="flex items-center gap-4 mb-12 px-4">
+                <h2 id="adminHeader" class="text-3xl font-black tracking-tight italic text-white">Market <span class="text-cyan-400">Listings</span></h2>
+                <div class="h-px flex-1 bg-white/5"></div>
+            </div>
+            <div id="internshipList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                </div>
+        </section>
+    </main>
+
+    <footer class="py-12 border-t border-white/5 text-center">
+        <p class="text-slate-600 font-bold uppercase text-[10px] tracking-[0.5em]">Smart Campus Connect | Recruitment Protocol 2025</p>
+    </footer>
+    <div id="applicantModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md z-[100] flex items-center justify-center p-4">
+    <div class="glass w-full max-w-4xl max-h-[80vh] overflow-hidden rounded-[3rem] border border-white/10 flex flex-col">
+        <div class="p-10 border-b border-white/5 flex justify-between items-center">
+            <h2 class="text-2xl font-black uppercase tracking-tighter">Placement Registry</h2>
+            <button onclick="downloadCSV()" class="px-4 py-2 bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-[8px] font-black uppercase rounded-lg hover:bg-cyan-500 hover:text-white transition-all">Download CSV</button>
+            <button onclick="closeModal()" class="text-slate-500 hover:text-white transition-colors uppercase text-[10px] font-black tracking-widest">Close Entry</button>
+        </div>
+        <div class="overflow-y-auto p-10">
+            <table class="w-full text-left">
+                <tbody id="applicantList">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+ function logoutUser() {
+        localStorage.removeItem('scc_user');
+        window.location.href = '../shared/index.html';
+    }
+</script>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/index.js"></script>
+    <script src="../../js/internship.js"></script>
+</body>
+</html>

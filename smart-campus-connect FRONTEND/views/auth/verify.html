@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mainframe Verification | SCC Secure Node</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); }
+        .border-glow { border: 1px solid rgba(34, 211, 238, 0.3); box-shadow: 0 0 20px rgba(34, 211, 238, 0.1); }
+    </style>
+</head>
+<body class="bg-slate-950 text-white flex items-center justify-center min-h-screen p-6">
+
+    <div class="max-w-lg w-full text-center">
+        <div class="mb-12">
+            <div class="w-16 h-16 bg-cyan-500 rounded-2xl mx-auto flex items-center justify-center mb-4 shadow-lg shadow-cyan-500/20">
+                  <div class="w-20 h-16 md:w-20 md:h-20 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/20">
+                <img src="../../images/ssclogo.png" alt="SCC" class="w-full h-full rounded-xl object-cover border border-white/10">
+            </div>
+            </div>
+            <h1 class="text-xl font-black uppercase tracking-[0.3em]">SCC <span class="text-cyan-400">Validator</span></h1>
+        </div>
+
+        <div id="verifyCard" class="glass p-10 rounded-[3rem] border-glow relative overflow-hidden">
+            <div id="loader" class="py-10">
+                <i class="fas fa-circle-notch fa-spin text-cyan-400 text-3xl"></i>
+                <p class="text-[10px] font-black uppercase tracking-widest mt-4 text-slate-500">Querying Mainframe Logs...</p>
+            </div>
+
+            <div id="resultContent" class="hidden animate-in fade-in duration-700">
+                <div class="mb-8">
+                    <span class="px-4 py-1 bg-green-500/10 text-green-400 border border-green-500/20 rounded-full text-[9px] font-black uppercase tracking-widest">
+                        Authenticity Confirmed
+                    </span>
+                </div>
+
+                <h2 id="vStudent" class="text-3xl font-black tracking-tighter uppercase mb-1">---</h2>
+                <p id="vRole" class="text-cyan-400 font-bold text-[10px] tracking-[0.3em] uppercase mb-8">---</p>
+
+                <div class="space-y-4 text-left border-y border-white/5 py-8 mb-8">
+                    <div class="flex justify-between text-xs">
+                        <span class="text-slate-500 font-bold uppercase tracking-widest text-[9px]">Task Name</span>
+                        <span id="vTask" class="font-black text-white uppercase tracking-tight text-right">---</span>
+                    </div>
+                    <div class="flex justify-between text-xs">
+                        <span class="text-slate-500 font-bold uppercase tracking-widest text-[9px]">Certificate ID</span>
+                        <span id="vID" class="font-mono text-cyan-400 text-[10px]">---</span>
+                    </div>
+                </div>
+
+                <p class="text-[9px] text-slate-500 font-bold uppercase leading-relaxed mb-8">
+                    This credential was manually audited and issued by the SCC Executive Council. 
+                    Traceable state: <span class="text-white">VERIFIED</span>.
+                </p>
+
+                <a href="../shared/index.html" class="block w-full py-4 bg-white text-slate-950 font-black rounded-2xl uppercase text-[10px] tracking-widest hover:bg-cyan-400 transition-all">
+                    Visit SCC Mainframe
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simulate real-time trace from URL parameters
+        window.onload = () => {
+            const params = new URLSearchParams(window.location.search);
+            const certId = params.get('id') || "SCC-TRACE-NULL";
+
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+                document.getElementById('resultContent').classList.remove('hidden');
+                
+                // Populating data (In production, this would be a fetch() call to your backend)
+                document.getElementById('vID').innerText = certId;
+                document.getElementById('vStudent').innerText = "Darshan Rathod";
+                document.getElementById('vRole').innerText = "Java Architect";
+                document.getElementById('vTask').innerText = "Backend API Optimization";
+            }, 2000);
+        };
+    </script>
+</body>
+</html>

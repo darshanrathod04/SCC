@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+
+:root {
+    --brand-cyan: #00f2fe;
+    --brand-blue: #4facfe;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: #020617; /* Slate-950 */
+    color: #f8fafc;
+}
+
+/* Expert Glassmorphism */
+.glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, var(--brand-cyan), var(--brand-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Smooth Entrance */
+.reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Professional Input Styles */
+input, select, textarea {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+}
+input:focus {
+    border-color: var(--brand-cyan) !important;
+    box-shadow: 0 0 15px rgba(0, 242, 254, 0.1) !important;
+}
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+}
+.animate-shake {
+    animation: shake 0.2s ease-in-out infinite;
+}
+.glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px); /* Required for Safari/Android Chrome */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+/* Infrastructure Node Animations */
+@keyframes pulse-border {
+    0% { border-color: rgba(168, 85, 247, 0.2); }
+    50% { border-color: rgba(168, 85, 247, 0.6); }
+    100% { border-color: rgba(168, 85, 247, 0.2); }
+}
+
+.glass:hover {
+    animation: pulse-border 2s infinite ease-in-out;
+    box-shadow: 0 0 40px rgba(168, 85, 247, 0.1);
+}
+
+/* Custom scrollbar for the Registry Modal */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(168, 85, 247, 0.3);
+    border-radius: 10px;
+}
+
+/* Professional Mobile Feel */
+html {
+  -webkit-text-size-adjust: 100%;
+  overscroll-behavior-y: contain; /* Stops pull-to-refresh */
+}
+
+body {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none; /* Prevents long-press text selection */
+}
+
+/* Thumb-friendly interactions */
+button, .glass {
+  min-height: 48px;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+button:active {
+  transform: scale(0.95); /* Realistic button press effect */
+}
