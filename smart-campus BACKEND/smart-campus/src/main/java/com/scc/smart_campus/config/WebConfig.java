@@ -11,7 +11,12 @@ public class WebConfig implements WebMvcConfigurer {
 @Override
 public void addCorsMappings(CorsRegistry registry) {
     registry.addMapping("/**")
-          .allowedOrigins("http://localhost:5503", "http://localhost:5505","http://localhost:5506" ) 
+          .allowedOrigins(
+    "http://localhost:5503",
+    "http://localhost:5505",
+    "http://localhost:5506",
+    "https://scc-smart-campus.netlify.app"
+)
             // PATCH ko yahan add karna compulsory hai
             .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH") 
             .allowedHeaders("*")
