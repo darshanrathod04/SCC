@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function loadLeaderboard() {
     try {
-        const res = await fetch("http://localhost:8080/api/students/leaderboard");
+        const res = await fetch("https://scc-r1co.onrender.com/api/students/leaderboard");
         if (!res.ok) throw new Error("Mainframe connection failed");
         const topStudents = await res.json();
         

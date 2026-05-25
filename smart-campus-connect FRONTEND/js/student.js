@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8080/api/students";
+const BASE_URL = "https://scc-r1co.onrender.com/api/students";
 
 document.addEventListener("DOMContentLoaded", () => {
     // --- UI SESSION SYNC ---
@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function pollForBroadcasts() {
     try {
-        const response = await fetch('http://localhost:8080/api/students/notifications');
+        const response = await fetch('https://scc-r1co.onrender.com/api/students/notifications');
         const notifications = await response.json();
         
         const dock = document.getElementById('notification-dock');

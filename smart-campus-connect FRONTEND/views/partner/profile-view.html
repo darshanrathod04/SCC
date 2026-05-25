@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     try {
         // --- PART A: LOAD PROFILE DETAILS ---
-        const response = await fetch(`http://localhost:8080/api/students/${globalStudentId}`);
+        const response = await fetch(`https://scc-r1co.onrender.com/api/students/${globalStudentId}`);
         if (!response.ok) throw new Error("Database Node Unreachable");
         
         const student = await response.json();
@@ -149,11 +149,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('userRole').innerText = student.role || "Verified Student";
         
         const img = student.profileImage || student.profile_image || 'user.png';
-        document.getElementById('userImg').src = `http://localhost:8080/images/${img}`;
+        document.getElementById('userImg').src = `https://scc-r1co.onrender.com/images/${img}`;
 
         // --- PART B: CHECK PARTNER RELATIONSHIP ---
         if (session && session.role === 'PARTNER') {
-            const relResp = await fetch(`http://localhost:8080/api/students/${globalStudentId}/check-app?partnerEmail=${session.email}`);
+            const relResp = await fetch(`https://scc-r1co.onrender.com/api/students/${globalStudentId}/check-app?partnerEmail=${session.email}`);
             if (relResp.ok) {
                 const appData = await relResp.json();
                 if (appData.hasApplied) {
@@ -180,13 +180,13 @@ async function downloadResume() {
     try {
         // Lead Tracking (Wait for it)
         if (session && session.role === 'PARTNER') {
-            await fetch(`http://localhost:8080/api/admin/track-lead?studentId=${globalStudentId}&partnerEmail=${session.email}`, {
+            await fetch(`https://scc-r1co.onrender.com/api/admin/track-lead?studentId=${globalStudentId}&partnerEmail=${session.email}`, {
                 method: 'POST'
             });
         }
 
         // Final Download URL
-        window.open(`http://localhost:8080/api/students/${globalStudentId}/resume`, '_blank');
+        window.open(`https://scc-r1co.onrender.com/api/students/${globalStudentId}/resume`, '_blank');
     } catch (err) {
         console.error("Sync Error:", err);
     }
@@ -206,7 +206,7 @@ async function saveToWatchlist() {
     };
 
     try {
-        const response = await fetch('http://localhost:8080/api/partners/watchlist/add', {
+        const response = await fetch('https://scc-r1co.onrender.com/api/partners/watchlist/add', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(watchlistData)
@@ -257,7 +257,7 @@ async function applyForJob() {
     };
 
     try {
-        const response = await fetch('http://localhost:8080/api/students/apply', {
+        const response = await fetch('https://scc-r1co.onrender.com/api/students/apply', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(applicationData)

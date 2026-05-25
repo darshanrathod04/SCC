@@ -6,7 +6,7 @@
 async function syncSkillToAudit(skillData) {
     try {
         // 1. SEND TO BACKEND (Spring Boot API)
-        const response = await fetch("http://localhost:8080/api/audit/submit", {
+        const response = await fetch("https://scc-r1co.onrender.com/api/audit/submit", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // --- START: REAL-TIME DATA FETCH (XP, Rank, Image) ---
     try {
         // Database se fresh stats fetch karo
-        const resp = await fetch(`http://localhost:8080/api/students/${user.id}`);
+        const resp = await fetch(`https://scc-r1co.onrender.com/api/students/${user.id}`);
         if (resp.ok) {
             const dbUser = await resp.json();
             
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const profileImg = document.getElementById('profileImage');
             if (profileImg) {
                 const imgFile = dbUser.profileImage || 'user.png';
-                profileImg.src = `http://localhost:8080/images/${imgFile}`;
+                profileImg.src = `https://scc-r1co.onrender.com/images/${imgFile}`;
                 profileImg.style.cursor = 'pointer';
                 profileImg.onclick = () => document.getElementById('imageInput').click();
             }
@@ -138,7 +138,7 @@ async function uploadProfilePhoto(event) {
     formData.append('image', file);
 
     try {
-        const response = await fetch(`http://localhost:8080/api/students/${user.id}/upload-photo`, {
+        const response = await fetch(`https://scc-r1co.onrender.com/api/students/${user.id}/upload-photo`, {
             method: 'POST',
             body: formData
         });
@@ -146,7 +146,7 @@ async function uploadProfilePhoto(event) {
         if (response.ok) {
             const newImageName = await response.text();
             // Nayi image turant UI par dikhao
-            document.getElementById('profileImage').src = `http://localhost:8080/images/${newImageName}`;
+            document.getElementById('profileImage').src = `https://scc-r1co.onrender.com/images/${newImageName}`;
             alert("MAINFRAME: Identity synchronized.");
         }
     } catch (err) {
@@ -157,7 +157,7 @@ async function uploadProfilePhoto(event) {
 
 async function syncInfrastructure(user) {
     try {
-        const res = await fetch(`http://localhost:8080/api/wallet/${user.id}/sync`);
+        const res = await fetch(`https://scc-r1co.onrender.com/api/wallet/${user.id}/sync`);
         if (res.ok) {
             const freshData = await res.json();
             const scoreText = document.querySelector('.text-cyan-400[id="scoreVal"]') || document.querySelector('.lg:grid-cols-4 .text-cyan-400');
@@ -176,7 +176,7 @@ async function loadLeaderboard() {
     const container = document.getElementById('leaderboardContainer');
     if (!container) return;
     try {
-        const res = await fetch('http://localhost:8080/api/students/leaderboard');
+        const res = await fetch('https://scc-r1co.onrender.com/api/students/leaderboard');
         const data = await res.json();
         const students = data.filter(s => s.role !== 'ADMIN' && s.role !== 'ORGANIZER');
         container.innerHTML = students.slice(0, 5).map((s, i) => `
@@ -191,7 +191,7 @@ async function loadTalentDiscovery() {
     const grid = document.getElementById('talentGrid');
     if (!grid) return;
     try {
-        const res = await fetch('http://localhost:8080/api/students/leaderboard');
+        const res = await fetch('https://scc-r1co.onrender.com/api/students/leaderboard');
         const data = await res.json();
         const students = data.filter(s => s.role === 'STUDENT').slice(0, 3);
         grid.innerHTML = students.map(s => `
@@ -246,7 +246,7 @@ async function syncOriginalXP() {
     }
 
     try {
-        const response = await fetch(`http://localhost:8080/api/students/${user.id}`);
+        const response = await fetch(`https://scc-r1co.onrender.com/api/students/${user.id}`);
         if (response.ok) {
             const dbData = await response.json();
             // Dashboard par XP aur Rank update karein

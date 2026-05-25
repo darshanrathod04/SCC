@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // FETCH PENDING AUDITS
     async function loadAuditStream() {
-        // Replace with your real API call: fetch("http://localhost:8080/api/audit/pending")
+        // Replace with your real API call: fetch("https://scc-r1co.onrender.com/api/audit/pending")
         const pending = JSON.parse(localStorage.getItem('pendingAudits') || "[]");
         
         if (pending.length === 0) {

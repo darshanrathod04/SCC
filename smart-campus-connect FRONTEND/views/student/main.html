@@ -323,7 +323,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 3. RANKINGS SYNC (Leaderboard)
     const leaderContainer = document.getElementById('leaderboardContainer');
     try {
-        const res = await fetch('http://localhost:8080/api/students/leaderboard');
+        const res = await fetch('https://scc-r1co.onrender.com/api/students/leaderboard');
         const data = await res.json();
         const students = data.filter(s => s.role === 'STUDENT').slice(0, 5);
         leaderContainer.innerHTML = students.map((s, i) => `
@@ -415,7 +415,7 @@ function syncProfileIdentity(user) {
     // Use the image from the database session
     if (user.profileImage) {
         // Points to your Java ResourceHandler path (/images/)
-        profileImg.src = `http://localhost:8080/images/${user.profileImage}?t=${new Date().getTime()}`;
+        profileImg.src = `https://scc-r1co.onrender.com/images/${user.profileImage}?t=${new Date().getTime()}`;
     }
 }
 

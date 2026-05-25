@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // --- 1. METRICS & COUNTERS ---
 async function fetchGlobalMetrics() {
     try {
-        const response = await fetch('http://localhost:8080/api/students/admin/total-xp');
+        const response = await fetch('https://scc-r1co.onrender.com/api/students/admin/total-xp');
         const data = await response.json();
         animateCounter('totalXpCounter', data.totalXp || 2400);
         animateCounter('studentCountCounter', data.studentCount || 4);
@@ -54,7 +54,7 @@ async function fetchAdminStudents() {
     const container = document.getElementById('adminStudentList');
     if (!container) return;
     try {
-        const response = await fetch('http://localhost:8080/api/students/admin/students-summary');
+        const response = await fetch('https://scc-r1co.onrender.com/api/students/admin/students-summary');
         const students = await response.json();
         const today = new Date().toISOString().split('T')[0];
 
@@ -78,7 +78,7 @@ async function fetchPendingPartners() {
     const list = document.getElementById('partnerApprovalList');
     if (!list) return;
     try {
-        const response = await fetch('http://localhost:8080/api/partners/pending');
+        const response = await fetch('https://scc-r1co.onrender.com/api/partners/pending');
         const partners = await response.json();
         
         if (partners.length === 0) {
@@ -107,7 +107,7 @@ async function fetchSystemPulse() {
     const feed = document.getElementById('pulseFeed');
     if (!feed) return;
     try {
-        const response = await fetch('http://localhost:8080/api/admin/activity');
+        const response = await fetch('https://scc-r1co.onrender.com/api/admin/activity');
         const logs = await response.json();
         
         feed.innerHTML = logs.map(log => {
@@ -134,7 +134,7 @@ async function executeBroadcast() {
 
     if (confirm(`INITIALIZE GLOBAL BROADCAST?\nSubject: ${subject}`)) {
         try {
-            await fetch('http://localhost:8080/api/admin/broadcast', {
+            await fetch('https://scc-r1co.onrender.com/api/admin/broadcast', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ subject, message })
@@ -151,7 +151,7 @@ async function initVelocityChart() {
     const canvas = document.getElementById('velocityChart');
     if (!canvas) return;
     try {
-        const response = await fetch('http://localhost:8080/api/admin/velocity-data');
+        const response = await fetch('https://scc-r1co.onrender.com/api/admin/velocity-data');
         const data = await response.json();
         new Chart(canvas.getContext('2d'), {
             type: 'line',
@@ -174,7 +174,7 @@ async function updateMarketDemand() {
     const container = document.getElementById('trendingSkills');
     if (!container) return;
     try {
-        const response = await fetch('http://localhost:8080/api/admin/activity');
+        const response = await fetch('https://scc-r1co.onrender.com/api/admin/activity');
         const logs = await response.json();
         const searchCounts = {};
         
@@ -199,7 +199,7 @@ async function updateMarketDemand() {
 async function approveTask(studentName, taskName, xp) {
     if (!confirm(`Authorize Executive Approval for ${studentName}?`)) return;
     try {
-        const response = await fetch(`http://localhost:8080/api/admin/approve-task`, { 
+        const response = await fetch(`https://scc-r1co.onrender.com/api/admin/approve-task`, { 
             method: 'POST',
             body: JSON.stringify({ studentName, taskName, xp })
         });
@@ -213,7 +213,7 @@ async function approveTask(studentName, taskName, xp) {
 async function approvePartner(id, name) {
     if (!confirm(`Authorize ${name}?`)) return;
     try {
-        const res = await fetch(`http://localhost:8080/api/partners/${id}/approve`, { method: 'PATCH' });
+        const res = await fetch(`https://scc-r1co.onrender.com/api/partners/${id}/approve`, { method: 'PATCH' });
         if (res.ok) { alert("AUTHORIZED"); fetchPendingPartners(); }
     } catch (e) { alert("Authorization Failed"); }
 }
@@ -250,7 +250,7 @@ async function syncSignature() {
     formData.append('image', fileInput.files[0]);
 
     try {
-        const response = await fetch('http://localhost:8080/api/admin/signature/upload', {
+        const response = await fetch('https://scc-r1co.onrender.com/api/admin/signature/upload', {
             method: 'POST',
             body: formData
         });
@@ -259,7 +259,7 @@ async function syncSignature() {
 
         if (response.ok) {
             const timestamp = new Date().getTime();
-            preview.src = `http://localhost:8080/images/signature.png?t=${timestamp}`;
+            preview.src = `https://scc-r1co.onrender.com/images/signature.png?t=${timestamp}`;
             alert("MAINFRAME SYNC COMPLETE: Signature Authority updated.");
         } else {
             const errorMsg = result.error || result.message || "Unknown Protocol Failure";
@@ -282,7 +282,7 @@ async function fetchPendingAudits() {
     if (!auditList) return;
 
     try {
-        const response = await fetch('http://localhost:8080/api/admin/tasks/pending');
+        const response = await fetch('https://scc-r1co.onrender.com/api/admin/tasks/pending');
         const audits = await response.json();
 
         if (audits.length === 0) {
@@ -327,7 +327,7 @@ async function loadPartnerRegistry() {
     if (!registryList) return;
 
     try {
-        const response = await fetch('http://localhost:8080/api/admin/partners/all');
+        const response = await fetch('https://scc-r1co.onrender.com/api/admin/partners/all');
         const partners = await response.json();
 
         if (partners.length === 0) {
@@ -368,7 +368,7 @@ async function terminatePartnerNode(id) {
     if (!confirm("CRITICAL: Permanently purge this partner from the mainframe?")) return;
 
     try {
-        const response = await fetch(`http://localhost:8080/api/admin/partners/${id}`, {
+        const response = await fetch(`https://scc-r1co.onrender.com/api/admin/partners/${id}`, {
             method: 'DELETE'
         });
 

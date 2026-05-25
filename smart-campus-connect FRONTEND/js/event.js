@@ -1,5 +1,5 @@
 
-const EVENT_API = "http://localhost:8080/api/events";
+const EVENT_API = "https://scc-r1co.onrender.com/api/events";
 
 const scc_user = JSON.parse(localStorage.getItem('scc_user'));
 

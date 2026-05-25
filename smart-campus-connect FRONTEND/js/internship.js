@@ -11,7 +11,7 @@ if (!scc_user) {
     window.location.href = "../auth/login.html";
 }
 
-const INTERNSHIP_API = "http://localhost:8080/api/internships";
+const INTERNSHIP_API = "https://scc-r1co.onrender.com/api/internships";
 
 document.addEventListener("DOMContentLoaded", async () => {
     // 2. IDENTITY RESOLUTION

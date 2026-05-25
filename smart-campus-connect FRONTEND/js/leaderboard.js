@@ -1,6 +1,6 @@
 async function fetchLeaderboard() {
     try {
-        const response = await fetch('http://localhost:8080/api/students/leaderboard');
+        const response = await fetch('https://scc-r1co.onrender.com/api/students/leaderboard');
         const allUsers = await response.json();
         
         // 1. Filter to show ONLY students (removes Admin/Organizer)

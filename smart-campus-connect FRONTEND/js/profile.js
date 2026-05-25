@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // 3. MAINFRAME HANDSHAKE (Fetch fresh data from Merged Controller)
     try {
-        const response = await fetch(`http://localhost:8080/api/students/${user.id}`);
+        const response = await fetch(`https://scc-r1co.onrender.com/api/students/${user.id}`);
         if (response.ok) {
             const freshData = await response.json();
             
@@ -54,7 +54,7 @@ function updateProfileUI(data) {
     const profileImg = document.getElementById('profileImage');
     if (profileImg && data.profileImage) {
         const cacheBuster = new Date().getTime();
-        profileImg.src = `http://localhost:8080/images/${data.profileImage}?v=${cacheBuster}`;
+        profileImg.src = `https://scc-r1co.onrender.com/images/${data.profileImage}?v=${cacheBuster}`;
     }
 }
 
@@ -63,7 +63,7 @@ async function completeProfessionalTask(taskName, xpReward) {
     const btn = event.target; // Get the button clicked
 
     try {
-        const response = await fetch(`http://localhost:8080/api/students/${user.id}/add-xp`, {
+        const response = await fetch(`https://scc-r1co.onrender.com/api/students/${user.id}/add-xp`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ xp: xpReward, task: taskName })
@@ -95,7 +95,7 @@ async function executeTask(button, taskName, xpReward, minXpRequired = 0) {
     }
 
     try {
-        const response = await fetch(`http://localhost:8080/api/students/${user.id}/add-xp`, {
+        const response = await fetch(`https://scc-r1co.onrender.com/api/students/${user.id}/add-xp`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ xp: xpReward, task: taskName })
@@ -129,7 +129,7 @@ async function saveStudentBio() {
     };
 
     try {
-        const response = await fetch(`http://localhost:8080/api/students/${user.id}/sync-bio`, {
+        const response = await fetch(`https://scc-r1co.onrender.com/api/students/${user.id}/sync-bio`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
@@ -146,7 +146,7 @@ async function executeTask(button, taskName, xpReward) {
     const user = JSON.parse(localStorage.getItem('scc_user'));
 
     try {
-        const response = await fetch(`http://localhost:8080/api/students/${user.id}/add-xp`, {
+        const response = await fetch(`https://scc-r1co.onrender.com/api/students/${user.id}/add-xp`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ xp: xpReward, task: taskName })

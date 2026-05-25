@@ -112,7 +112,7 @@
     async function fetchWatchlist() {
         try {
             // Fetches data from your Java backend
-            const response = await fetch(`http://localhost:8080/api/partners/watchlist?email=${session.email}`);
+            const response = await fetch(`https://scc-r1co.onrender.com/api/partners/watchlist?email=${session.email}`);
             const list = await response.json();
             
             const container = document.getElementById('watchlistContainer');

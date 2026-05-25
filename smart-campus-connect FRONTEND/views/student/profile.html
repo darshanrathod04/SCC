@@ -193,7 +193,7 @@ function generateCertificate() {
 //     const user = JSON.parse(localStorage.getItem('scc_user'));
     
 //     try {
-//         const response = await fetch(`http://localhost:8080/api/students/${user.id}/add-xp`, {
+//         const response = await fetch(`https://scc-r1co.onrender.com/api/students/${user.id}/add-xp`, {
 //             method: 'POST',
 //             headers: { 'Content-Type': 'application/json' },
 //             body: JSON.stringify({ xp: xpReward, reason: taskName })
@@ -217,7 +217,7 @@ function generateCertificate() {
             formData.append('file', file);
 
             try {
-                const response = await fetch(`http://localhost:8080/api/students/${user.id}/upload-photo`, {
+                const response = await fetch(`https://scc-r1co.onrender.com/api/students/${user.id}/upload-photo`, {
                     method: 'POST',
                     body: formData
                 });
@@ -243,7 +243,7 @@ function generateCertificate() {
         const payload = { userId: user.id, skillName: skillName, status: 'PENDING' };
 
         try {
-            const response = await fetch(`http://localhost:8080/api/students/${user.id}/commit-skill`, {
+            const response = await fetch(`https://scc-r1co.onrender.com/api/students/${user.id}/commit-skill`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
@@ -303,7 +303,7 @@ async function uploadResume() {
     status.innerText = "SYNCHRONIZING WITH MAINFRAME...";
 
     try {
-        const response = await fetch('http://localhost:8080/api/students/upload-resume', {
+        const response = await fetch('https://scc-r1co.onrender.com/api/students/upload-resume', {
             method: 'POST',
             body: formData
         });

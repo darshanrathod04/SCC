@@ -56,7 +56,7 @@ async function executeBroadcast() {
     }
 
     try {
-        const response = await fetch('http://localhost:8080/api/admin/broadcast', {
+        const response = await fetch('https://scc-r1co.onrender.com/api/admin/broadcast', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
