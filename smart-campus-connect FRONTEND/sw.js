@@ -1,17 +1,18 @@
-const CACHE_NAME = 'scc-mainframe-v3';
+const CACHE_NAME = 'scc-mainframe-v4';
+
 const ASSETS_TO_CACHE = [
   '/',
-  '/views/shared/index.html',     // Login Page
-  '/views/student/main.html',     // <--- SAHI PATH: views/student/
-  '/views/shared/internships.html', 
+  '/views/shared/index.html',
+  '/views/student/main.html',
+  '/views/shared/internships.html',
   '/views/shared/events.html',
-  '/css/style.css', 
+  '/css/style.css',
   '/js/main.js',
   '/images/logo.png',
   '/manifest.json'
 ];
 
-// 1. Install Event: Saari files ko memory mein save karna
+// INSTALL
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -19,10 +20,11 @@ self.addEventListener('install', (event) => {
       return cache.addAll(ASSETS_TO_CACHE);
     })
   );
-  self.skipWaiting(); // Naye sw ko turant activate karne ke liye
+
+  self.skipWaiting();
 });
 
-// 2. Activate Event: Purana cache saaf karna
+// ACTIVATE
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -36,22 +38,42 @@ self.addEventListener('activate', (event) => {
       );
     })
   );
+
+  self.clients.claim();
 });
 
-// 3. Fetch Event: Smart Navigation & Offline Support
+// FETCH
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      // Agar cache mein file mil gayi toh wahi dikhao
-      if (response) return response;
+    caches.match(event.request).then((cachedResponse) => {
 
-      // Agar cache mein nahi hai toh internet se mangwao
-      return fetch(event.request).catch(() => {
-        // AGAR OFFLINE HAI aur page nahi mil raha, toh default home dikhao
-        if (event.request.mode === 'navigate') {
-          return caches.match('/views/shared/index.html');
-        }
-      });
+      // Cache hit
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+
+      // Network request
+      return fetch(event.request)
+        .then((networkResponse) => {
+          return networkResponse;
+        })
+        .catch(() => {
+
+          // Offline page fallback
+          if (event.request.mode === 'navigate') {
+            return caches.match('/views/shared/index.html');
+          }
+
+          // IMPORTANT: Always return valid response
+          return new Response(JSON.stringify({
+            error: 'Offline'
+          }), {
+            status: 503,
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+        });
     })
   );
 });

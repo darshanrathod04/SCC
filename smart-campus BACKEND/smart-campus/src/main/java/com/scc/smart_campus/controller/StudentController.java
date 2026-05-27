@@ -1,25 +1,42 @@
 package com.scc.smart_campus.controller;
 
-import com.scc.smart_campus.model.*;
-import com.scc.smart_campus.model.MessageResponse;
-import com.scc.smart_campus.repository.*;
-import com.scc.smart_campus.service.*;
-import jakarta.validation.Valid;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import com.scc.smart_campus.service.EmailNotificationService;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.*;
-import java.util.*;
-import java.util.stream.Collectors;
+import com.scc.smart_campus.model.JobApplication;
+import com.scc.smart_campus.model.MessageResponse;
+import com.scc.smart_campus.model.Student;
+import com.scc.smart_campus.repository.ActivityLogRepository;
+import com.scc.smart_campus.repository.JobApplicationRepository;
+import com.scc.smart_campus.repository.StudentRepository;
+import com.scc.smart_campus.service.EmailNotificationService;
+import com.scc.smart_campus.service.StudentService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/students")
@@ -297,17 +314,37 @@ public ResponseEntity<?> addExperience(@PathVariable Long id, @RequestBody Map<S
 
 @PostMapping("/request-otp")
 public ResponseEntity<?> requestStudentOTP(@RequestBody Map<String, String> request) {
-    String email = request.get("email");
-    
-    // Generate 6-digit OTP
-    String otp = String.valueOf((int)((Math.random() * 900000) + 100000));
-    
-    // SCC Security Protocol: Email dispatch
+
     try {
-        emailService.sendOTP(email, otp); 
-        return ResponseEntity.ok(Map.of("message", "Verification code transmitted to " + email));
+
+        System.out.println("========= OTP API HIT =========");
+
+        String email = request.get("email");
+
+        System.out.println("EMAIL RECEIVED: " + email);
+
+        // Generate OTP
+        String otp = String.valueOf((int)((Math.random() * 900000) + 100000));
+
+        System.out.println("OTP GENERATED: " + otp);
+
+        // SEND MAIL
+        emailService.sendOTP(email, otp);
+
+        System.out.println("EMAIL SENT SUCCESSFULLY");
+
+        return ResponseEntity.ok(
+                Map.of("message", "Verification code transmitted to " + email)
+        );
+
     } catch (Exception e) {
-        return ResponseEntity.status(500).body("Email Service Offline: " + e.getMessage());
+
+        System.out.println("========= OTP ERROR =========");
+
+        e.printStackTrace();
+
+        return ResponseEntity.status(500)
+                .body("OTP FAILED: " + e.getMessage());
     }
 }
 
