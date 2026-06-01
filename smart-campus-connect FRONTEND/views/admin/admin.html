@@ -9,18 +9,34 @@
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    <script>
-        (function verifyAuthority() {
-            const sessionNode = JSON.parse(localStorage.getItem('scc_user'));
-            
-            // Check if user exists and has the ADMIN role
-            if (!sessionNode || sessionNode.role !== 'ADMIN') {
-                console.error("CRITICAL: Unauthorized Access Attempt to Founder Portal.");
-                alert("ACCESS DENIED: Founder Level Clearances Required.");
-                window.location.href = '../student/main.html';
-            }
-        })();
-    </script>
+   <script>
+(function verifyAuthority() {
+
+    const sessionNode = JSON.parse(localStorage.getItem('scc_user'));
+
+    console.log("SESSION NODE:", sessionNode);
+
+    const founderEmail = "darshanmrathod.2005@gmail.com";
+
+    if (
+        !sessionNode ||
+        !sessionNode.email ||
+        sessionNode.email.trim().toLowerCase() !== founderEmail.toLowerCase()
+    ) {
+
+        console.error("CRITICAL: Unauthorized Access Attempt.");
+
+        alert("ACCESS DENIED: Founder Level Clearances Required.");
+
+        window.location.href = '../student/main.html';
+
+        return;
+    }
+
+    console.log("FOUNDER ACCESS GRANTED");
+
+})();
+</script>
 </head>
 
 <body class="bg-[#020617] text-white selection:bg-cyan-500 overflow-x-hidden">

@@ -44,10 +44,15 @@ document.addEventListener("DOMContentLoaded", () => {
                     // Priority 1: The Singular Admin (The Founder)
                     const founderEmail = "darshanmrathod.2005@gmail.com";
 
-                   if (userNode.email === founderEmail || userNode.role === 'ADMIN') {
-                        alert("Founder Authority Recognized. Accessing Admin Mainframe...");
-                        window.location.href = '../admin/admin.html';
-                    } 
+if (
+    userNode.email?.trim().toLowerCase() === founderEmail.toLowerCase()
+) {
+
+    alert("Founder Authority Recognized. Accessing Admin Mainframe...");
+
+    window.location.href = '../admin/admin.html';
+
+} 
                     // Priority 2: Multi-User Organizers
                     else if (userNode.role === 'ORGANIZER') {
                         alert(`Welcome, ${userNode.fullName}. Opening Organizer Dashboard...`);
