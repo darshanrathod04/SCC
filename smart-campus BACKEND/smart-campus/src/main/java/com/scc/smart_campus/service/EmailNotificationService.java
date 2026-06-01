@@ -1,6 +1,10 @@
 
 package com.scc.smart_campus.service;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -9,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -183,44 +188,46 @@ public void sendAutoMatchAlert(String studentName, String matchedSkill, int xp) 
 
         try {
 
-            RestTemplate restTemplate = new RestTemplate();
+           RestTemplate restTemplate = new RestTemplate();
 
-            HttpHeaders headers = new HttpHeaders();
+HttpHeaders headers = new HttpHeaders();
+headers.setContentType(MediaType.APPLICATION_JSON);
 
-            headers.setContentType(MediaType.APPLICATION_JSON);
+headers.set("api-key", brevoApiKey);
 
-            headers.set("api-key", brevoApiKey);
+Map<String, Object> body = new HashMap<>();
 
-            String body = """
-{
-  "sender": {
-    "name": "SCC MAINFRAME",
-    "email": "sccmainframe.nagpur@gmail.com"
-  },
-  "to": [{
-    "email": "%s"
-  }],
-  "subject": "SCC Verification Code",
-  "htmlContent": "
-  <div style='font-family:Arial;padding:20px'>
-      <h2>SCC MAINFRAME SECURITY</h2>
-      <p>Your verification code is:</p>
-      <h1 style='letter-spacing:5px'>%s</h1>
-      <p>This OTP expires in 5 minutes.</p>
-  </div>"
-}
-""".formatted(email, otp);
+Map<String, String> sender = new HashMap<>();
+sender.put("name", "SCC Mainframe");
+sender.put("email", "sccmainframe.nagpur@gmail.com");
 
-            HttpEntity<String> entity =
-                    new HttpEntity<>(body, headers);
+List<Map<String, String>> to = new ArrayList<>();
 
-            restTemplate.postForEntity(
-                    "https://api.brevo.com/v3/smtp/email",
-                    entity,
-                    String.class
-            );
+Map<String, String> recipient = new HashMap<>();
+recipient.put("email", email);
 
-            System.out.println("OTP EMAIL SENT SUCCESSFULLY");
+to.add(recipient);
+
+body.put("sender", sender);
+body.put("to", to);
+body.put("subject", "SCC OTP Verification");
+
+String htmlContent =
+        "<h2>Your OTP is: " + otp + "</h2>" +
+        "<p>Valid for 5 minutes.</p>";
+
+body.put("htmlContent", htmlContent);
+
+HttpEntity<Map<String, Object>> request =
+        new HttpEntity<>(body, headers);
+
+ResponseEntity<String> response = restTemplate.postForEntity(
+        "https://api.brevo.com/v3/smtp/email",
+        request,
+        String.class
+);
+
+System.out.println(response.getBody());
 
         } catch (Exception e) {
 
