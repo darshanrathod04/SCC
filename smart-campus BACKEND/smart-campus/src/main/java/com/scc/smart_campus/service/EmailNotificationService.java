@@ -1,17 +1,23 @@
 
 package com.scc.smart_campus.service;
-import java.util.concurrent.ConcurrentHashMap;
+import java.io.File;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+
 import jakarta.mail.internet.MimeMessage;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import java.io.File;
 
 @Service
 public class EmailNotificationService {
@@ -150,22 +156,80 @@ public void sendAutoMatchAlert(String studentName, String matchedSkill, int xp) 
     mailSender.send(message);
 }
 // Is naye method ko apne service mein add karein
-public void sendOTP(String recipientEmail, String otp) {
-    otpCache.put(recipientEmail, otp);
-    try {
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+// public void sendOTP(String recipientEmail, String otp) {
+//     otpCache.put(recipientEmail, otp);
+//     try {
+//         MimeMessage message = mailSender.createMimeMessage();
+//         MimeMessageHelper helper = new MimeMessageHelper(message, true);
         
-        helper.setFrom("sccmainframe.nagpur@gmail.com", "SCC SECURITY COUNCIL"); 
-        helper.setTo(recipientEmail);
-        helper.setSubject("SCC MAINFRAME: Node Verification Code");
-        helper.setText("Your security access code for registration is: " + otp + 
-                        "\n\nThis code is valid for 5 minutes.");
+//         helper.setFrom("sccmainframe.nagpur@gmail.com", "SCC SECURITY COUNCIL"); 
+//         helper.setTo(recipientEmail);
+//         helper.setSubject("SCC MAINFRAME: Node Verification Code");
+//         helper.setText("Your security access code for registration is: " + otp + 
+//                         "\n\nThis code is valid for 5 minutes.");
 
-        mailSender.send(message);
-    } catch (Exception e) {
-        throw new RuntimeException("OTP transmission failed: " + e.getMessage());
-    }
+//         mailSender.send(message);
+//     } catch (Exception e) {
+//         throw new RuntimeException("OTP transmission failed: " + e.getMessage());
+//     }
+
+
+
+    @Value("${BREVO_API_KEY}")
+    private String brevoApiKey;
+
+    public void sendOTP(String email, String otp) {
+        otpCache.put(email, otp);
+
+        try {
+
+            RestTemplate restTemplate = new RestTemplate();
+
+            HttpHeaders headers = new HttpHeaders();
+
+            headers.setContentType(MediaType.APPLICATION_JSON);
+
+            headers.set("api-key", brevoApiKey);
+
+            String body = """
+{
+  "sender": {
+    "name": "SCC MAINFRAME",
+    "email": "sccmainframe.nagpur@gmail.com"
+  },
+  "to": [{
+    "email": "%s"
+  }],
+  "subject": "SCC Verification Code",
+  "htmlContent": "
+  <div style='font-family:Arial;padding:20px'>
+      <h2>SCC MAINFRAME SECURITY</h2>
+      <p>Your verification code is:</p>
+      <h1 style='letter-spacing:5px'>%s</h1>
+      <p>This OTP expires in 5 minutes.</p>
+  </div>"
 }
+""".formatted(email, otp);
 
+            HttpEntity<String> entity =
+                    new HttpEntity<>(body, headers);
+
+            restTemplate.postForEntity(
+                    "https://api.brevo.com/v3/smtp/email",
+                    entity,
+                    String.class
+            );
+
+            System.out.println("OTP EMAIL SENT SUCCESSFULLY");
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            throw new RuntimeException(
+                    "OTP transmission failed: "
+                            + e.getMessage()
+            );
+        }
+    }
 }
