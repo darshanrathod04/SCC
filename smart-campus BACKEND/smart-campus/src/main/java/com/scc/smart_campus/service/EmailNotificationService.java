@@ -53,7 +53,8 @@ public class EmailNotificationService {
 
             mailSender.send(message);
         } catch (Exception e) {
-            System.out.println("Email Logic Failed: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException(" Welcome email Failed: " + e.getMessage());
         }
     }
 
@@ -104,7 +105,7 @@ public void sendPartnerApprovalEmail(String email, String companyName) {
     message.setText("Congratulations " + companyName + ",\n\n" +
         "Your organization has been verified by the SCC Executive Council.\n" +
         "You now have full access to the Conclave Talent Pool.\n\n" +
-        "Access Link: http://localhost:5503/conclave.html\n\n" +
+        "Access Link: https://scc-smart-campus.netlify.app/conclave.html\n\n" +
         "Regards,\n" +
         "SCC Mainframe Admin");
     mailSender.send(message);

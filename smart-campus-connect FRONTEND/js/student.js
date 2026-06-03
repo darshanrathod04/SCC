@@ -1,4 +1,4 @@
-const BASE_URL = "https://scc-r1co.onrender.com/api/students";
+const BASE_URL = "https://scc-r1co.onrender.com/api/auth";
 
 document.addEventListener("DOMContentLoaded", () => {
     // --- UI SESSION SYNC ---

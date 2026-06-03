@@ -16,6 +16,11 @@ public class AuthController {
     @Autowired
     private StudentRepository studentRepository;
 
+
+@Autowired
+private EmailNotificationService emailService;
+
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         return studentRepository.findByEmail(request.getEmail())
@@ -45,6 +50,22 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerStudent(@RequestBody Student student) {
-        return ResponseEntity.ok(studentRepository.save(student));
+
+        Student savedStudent = studentRepository.save(student);
+
+        emailService.sendWelcomeEmail(
+            savedStudent.getEmail(),
+            savedStudent.getFullName()
+        );
+
+
+        return ResponseEntity.ok().body(
+            java.util.map.of(
+           "success", true,
+           "message", "Registration Successful. Check Our Email.",
+           "student", savedStudent
+
+            )
+        );
     }
 }
