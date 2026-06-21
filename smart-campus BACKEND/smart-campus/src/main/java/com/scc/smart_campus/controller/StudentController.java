@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.scc.smart_campus.model.StudentProfileDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -53,8 +54,6 @@ public class StudentController {
 
     @Autowired
     private EmailNotificationService emailService;
-    
-
 
 
     @Autowired
@@ -89,7 +88,7 @@ public class StudentController {
         return ResponseEntity.ok(studentService.getTopStudentsByXP());
     }
 
-  @GetMapping("/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
         return studentService.findById(id)
                 .map(student -> {
@@ -99,7 +98,7 @@ public class StudentController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-  @GetMapping("/{id}/sync")
+    @GetMapping("/{id}/sync")
     public ResponseEntity<Student> syncStudent(@PathVariable Long id) {
         return studentRepository.findById(id)
                 .map(ResponseEntity::ok)
@@ -110,7 +109,7 @@ public class StudentController {
     // 2. BIO, SKILLS & AUDIT STREAM (Merged Logic)
     // ==========================================
 
-  @PostMapping("/{id}/sync-bio")
+    @PostMapping("/{id}/sync-bio")
     public ResponseEntity<?> updateBio(@PathVariable Long id, @RequestBody BioUpdateRequest bioData) {
         studentService.updateStudentBio(id, bioData);
         return ResponseEntity.ok(new MessageResponse("Bio Node Synchronized Successfully"));
@@ -168,7 +167,7 @@ public class StudentController {
 
     @PostMapping("/upload-resume")
     public ResponseEntity<String> uploadResume(@RequestParam("file") MultipartFile file,
-                                             @RequestParam("email") String email) {
+                                               @RequestParam("email") String email) {
         try {
             String uploadDir = "uploads/resumes/";
             File directory = new File(uploadDir);
@@ -209,10 +208,10 @@ public class StudentController {
             applicationRepo.save(app);
 
             emailService.sendJobApplication(
-                partnerEmail,
-                student.getFullName(),
-                (student.getExperiencePoints() != null ? student.getExperiencePoints() : 0),
-                "uploads/resumes/" + student.getResumeFileName()
+                    partnerEmail,
+                    student.getFullName(),
+                    (student.getExperiencePoints() != null ? student.getExperiencePoints() : 0),
+                    "uploads/resumes/" + student.getResumeFileName()
             );
 
             return ResponseEntity.ok("APPLICATION_SUCCESSFUL");
@@ -292,120 +291,127 @@ public class StudentController {
     // 2. XP SYSTEM (Fixes 500)
     // ==========================================
 
-  @PostMapping("/{id}/add-xp")
-public ResponseEntity<?> addExperience(@PathVariable Long id, @RequestBody Map<String, Object> payload) {
-    try {
-        // Safe parsing: String ko Integer mein badalna
-        int points = Integer.parseInt(payload.get("xp").toString());
-        String taskName = payload.get("task").toString();
+    @PostMapping("/{id}/add-xp")
+    public ResponseEntity<?> addExperience(@PathVariable Long id, @RequestBody Map<String, Object> payload) {
+        try {
+            // Safe parsing: String ko Integer mein badalna
+            int points = Integer.parseInt(payload.get("xp").toString());
+            String taskName = payload.get("task").toString();
 
-        studentService.addExperiencePoints(id, points, taskName);
-        
-        return ResponseEntity.ok(Map.of("status", "SUCCESS", "message", "XP Synchronized"));
-    } catch (RuntimeException e) {
-        // Agar task pehle se complete hai, toh 400 Bad Request
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-    } catch (Exception e) {
-        // Kisi aur technical error ke liye 500
-        return ResponseEntity.status(500).body("Error: " + e.getMessage());
+            studentService.addExperiencePoints(id, points, taskName);
+
+            return ResponseEntity.ok(Map.of("status", "SUCCESS", "message", "XP Synchronized"));
+        } catch (RuntimeException e) {
+            // Agar task pehle se complete hai, toh 400 Bad Request
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            // Kisi aur technical error ke liye 500
+            return ResponseEntity.status(500).body("Error: " + e.getMessage());
+        }
     }
-}
 
 
-@PostMapping("/request-otp")
-public ResponseEntity<?> requestStudentOTP(@RequestBody Map<String, String> request) {
+    @PostMapping("/request-otp")
+    public ResponseEntity<?> requestStudentOTP(@RequestBody Map<String, String> request) {
 
-    try {
+        try {
 
-        System.out.println("========= OTP API HIT =========");
+            System.out.println("========= OTP API HIT =========");
 
+            String email = request.get("email");
+
+            System.out.println("EMAIL RECEIVED: " + email);
+
+            // Generate OTP
+            String otp = String.valueOf((int) ((Math.random() * 900000) + 100000));
+
+            System.out.println("OTP GENERATED: " + otp);
+
+            // SEND MAIL
+            emailService.sendOTP(email, otp);
+
+            System.out.println("EMAIL SENT SUCCESSFULLY");
+
+            return ResponseEntity.ok(
+                    Map.of("message", "Verification code transmitted to " + email)
+            );
+
+        } catch (Exception e) {
+
+            System.out.println("========= OTP ERROR =========");
+
+            e.printStackTrace();
+
+            return ResponseEntity.status(500)
+                    .body("OTP FAILED: " + e.getMessage());
+        }
+    }
+
+
+    @PostMapping("/verify-otp")
+    public ResponseEntity<?> verifyOTP(@RequestBody Map<String, String> request) {
         String email = request.get("email");
+        String otp = request.get("otp");
 
-        System.out.println("EMAIL RECEIVED: " + email);
+        // Aapki service mein pehle se 'verifyOTP' method hai
+        boolean isValid = emailService.verifyOTP(email, otp);
 
-        // Generate OTP
-        String otp = String.valueOf((int)((Math.random() * 900000) + 100000));
-
-        System.out.println("OTP GENERATED: " + otp);
-
-        // SEND MAIL
-        emailService.sendOTP(email, otp);
-
-        System.out.println("EMAIL SENT SUCCESSFULLY");
-
-        return ResponseEntity.ok(
-                Map.of("message", "Verification code transmitted to " + email)
-        );
-
-    } catch (Exception e) {
-
-        System.out.println("========= OTP ERROR =========");
-
-        e.printStackTrace();
-
-        return ResponseEntity.status(500)
-                .body("OTP FAILED: " + e.getMessage());
+        if (isValid) {
+            return ResponseEntity.ok("Verified");
+        } else {
+            return ResponseEntity.status(401).body("Invalid OTP");
+        }
     }
-}
-
-
-@PostMapping("/verify-otp")
-public ResponseEntity<?> verifyOTP(@RequestBody Map<String, String> request) {
-    String email = request.get("email");
-    String otp = request.get("otp");
-    
-    // Aapki service mein pehle se 'verifyOTP' method hai
-    boolean isValid = emailService.verifyOTP(email, otp);
-    
-    if (isValid) {
-        return ResponseEntity.ok("Verified");
-    } else {
-        return ResponseEntity.status(401).body("Invalid OTP");
-    }
-}
 
 // ==========================================
 // 1. DIRECTORY & IDENTITY PROTOCOLS
 // ==========================================
 
 
-@PostMapping("/register")
-public ResponseEntity<?> registerStudent(@Valid @RequestBody Student student) {
-    // 1. Initial XP Logic
-    if (student.getExperiencePoints() == null) {
-        student.setExperiencePoints(0);
+    @PostMapping("/register")
+    public ResponseEntity<?> registerStudent(@Valid @RequestBody Student student) {
+        // 1. Initial XP Logic
+        if (student.getExperiencePoints() == null) {
+            student.setExperiencePoints(0);
+        }
+
+        System.out.println("PROTOCOL: Initializing Identity for: " + student.getFullName());
+
+        // 2. Database Save
+        Student savedStudent = studentService.save(student);
+        System.out.println("PROTOCOL: Identity Saved with ID: " + savedStudent.getId());
+
+        // 3. Welcome Email Trigger (Mandatory)
+        try {
+            System.out.println("PROTOCOL: Attempting Welcome Email dispatch to: " + savedStudent.getEmail());
+            emailService.sendWelcomeEmail(savedStudent.getEmail(), savedStudent.getFullName());
+            System.out.println("PROTOCOL: Welcome Email DISPATCHED.");
+        } catch (Exception e) {
+            System.err.println("CRITICAL: Welcome Email Failed: " + e.getMessage());
+        }
+
+        return new ResponseEntity<>(savedStudent, HttpStatus.CREATED);
     }
 
-    System.out.println("PROTOCOL: Initializing Identity for: " + student.getFullName());
+    // 1. Notification Endpoint (Jo frontend bar-baar dhoond raha hai)
+    @GetMapping("/notifications")
+    public ResponseEntity<List<Map<String, String>>> getNotifications() {
+        List<Map<String, String>> announcements = new ArrayList<>();
 
-    // 2. Database Save
-    Student savedStudent = studentService.save(student);
-    System.out.println("PROTOCOL: Identity Saved with ID: " + savedStudent.getId());
+        // Default system message agar DB khali hai
+        Map<String, String> note = new HashMap<>();
+        note.put("subject", "System Update");
+        note.put("message", "Mainframe is now synchronized with Port 5505.");
+        announcements.add(note);
 
-    // 3. Welcome Email Trigger (Mandatory)
-    try {
-        System.out.println("PROTOCOL: Attempting Welcome Email dispatch to: " + savedStudent.getEmail());
-        emailService.sendWelcomeEmail(savedStudent.getEmail(), savedStudent.getFullName());
-        System.out.println("PROTOCOL: Welcome Email DISPATCHED.");
-    } catch (Exception e) {
-        System.err.println("CRITICAL: Welcome Email Failed: " + e.getMessage());
+        return ResponseEntity.ok(announcements);
     }
 
-    return new ResponseEntity<>(savedStudent, HttpStatus.CREATED);
-}
+    @GetMapping("/{id}/profile")
+    public ResponseEntity<?> getStudentProfile(@PathVariable Long id) {
+        return studentRepository.findById(id)
+                .map(student -> ResponseEntity.ok(new StudentProfileDTO(student)))
+                .orElse(ResponseEntity.notFound().build());
 
-// 1. Notification Endpoint (Jo frontend bar-baar dhoond raha hai)
-@GetMapping("/notifications")
-public ResponseEntity<List<Map<String, String>>> getNotifications() {
-    List<Map<String, String>> announcements = new ArrayList<>();
-    
-    // Default system message agar DB khali hai
-    Map<String, String> note = new HashMap<>();
-    note.put("subject", "System Update");
-    note.put("message", "Mainframe is now synchronized with Port 5505.");
-    announcements.add(note);
-    
-    return ResponseEntity.ok(announcements);
-}
-
+    }
 }
