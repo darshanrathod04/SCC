@@ -5,6 +5,8 @@ import com.scc.smart_campus.model.LoginResponse;
 import com.scc.smart_campus.model.Student;
 import com.scc.smart_campus.repository.StudentRepository;
 import java.time.LocalDateTime;
+
+import com.scc.smart_campus.service.EmailNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -60,7 +62,7 @@ private EmailNotificationService emailService;
 
 
         return ResponseEntity.ok().body(
-            java.util.map.of(
+            java.util.Map.of(
            "success", true,
            "message", "Registration Successful. Check Our Email.",
            "student", savedStudent
