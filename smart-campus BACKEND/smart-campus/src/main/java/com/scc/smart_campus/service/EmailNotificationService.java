@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import org.springframework.scheduling.annotation.Async;
 
 import jakarta.mail.internet.MimeMessage;
 
@@ -32,7 +33,8 @@ public class EmailNotificationService {
     
     @Autowired
     private TemplateEngine templateEngine;
-    
+
+    @Async
     public void sendWelcomeEmail(String recipientEmail, String fullName) {
         try {
             // 1. Context mein data set karein (HTML variables ke liye)
@@ -57,6 +59,7 @@ public class EmailNotificationService {
             throw new RuntimeException(" Welcome email Failed: " + e.getMessage());
         }
     }
+
 
     public void sendCertificateIssuanceEmail(String recipientEmail, String studentName, String taskName, String certId) {
         SimpleMailMessage message = new SimpleMailMessage();
@@ -184,6 +187,7 @@ public void sendAutoMatchAlert(String studentName, String matchedSkill, int xp) 
     @Value("${BREVO_API_KEY}")
     private String brevoApiKey;
 
+    @Async
     public void sendOTP(String email, String otp) {
         otpCache.put(email, otp);
 
@@ -228,7 +232,7 @@ ResponseEntity<String> response = restTemplate.postForEntity(
         String.class
 );
 
-System.out.println(response.getBody());
+            System.out.println("Async OTP Dispatched: " + response.getBody());
 
         } catch (Exception e) {
 
