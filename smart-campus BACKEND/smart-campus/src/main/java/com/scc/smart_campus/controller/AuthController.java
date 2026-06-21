@@ -5,6 +5,8 @@ import com.scc.smart_campus.model.LoginResponse;
 import com.scc.smart_campus.model.Student;
 import com.scc.smart_campus.repository.StudentRepository;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.scc.smart_campus.service.EmailNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,21 +55,24 @@ private EmailNotificationService emailService;
     @PostMapping("/register")
     public ResponseEntity<?> registerStudent(@RequestBody Student student) {
 
+        // 1. Save student to database
         Student savedStudent = studentRepository.save(student);
 
+        // 2. Dispatch Welcome Email asynchronously
+        System.out.println("PROTOCOL: Attempting Welcome Email dispatch to: " + savedStudent.getEmail());
         emailService.sendWelcomeEmail(
-            savedStudent.getEmail(),
-            savedStudent.getFullName()
+                savedStudent.getEmail(),
+                savedStudent.getFullName()
         );
 
+        // 3. Create a clean map without the raw entity to stop Jackson from scanning relationships
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("message", "Registration Successful. Check Your Email.");
+        response.put("studentId", savedStudent.getId());
+        response.put("fullName", savedStudent.getFullName());
+        response.put("email", savedStudent.getEmail());
 
-        return ResponseEntity.ok().body(
-            java.util.Map.of(
-           "success", true,
-           "message", "Registration Successful. Check Our Email.",
-           "student", savedStudent
-
-            )
-        );
+        return ResponseEntity.ok().body(response);
     }
 }
